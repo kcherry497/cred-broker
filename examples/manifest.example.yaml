@@ -1,0 +1,54 @@
+# cred-broker manifest — copy to ~/.config/cred-broker/manifest.yaml (or point CRED_MANIFEST at it).
+#
+# Every top-level key that does not start with "_" is a brokered credential. The manifest holds
+# NO secrets: only names, what they are for, and where pass keeps the value. The agent sees this
+# file's contents (via the session-start hook); it never sees the values.
+#
+# Fields:
+#   describes  required  What the credential is for, in plain words. Shown to the agent.
+#   pass_path  required  The entry's path inside the password store (no ".gpg").
+#   env        required  The environment variable `cred exec` puts the value in.
+#   risk       optional  low | medium | high. Shown to the agent and written to the audit log.
+#   format     optional  line (default): the first line of the entry, pass's convention.
+#                        full: the whole entry, for multi-line values (PEM keys, JSON).
+#   note       optional  Anything else the agent should know (scopes, expiry, quirks).
+#
+# Store a value (on your own terminal; it prompts, nothing goes through the agent):
+#   cred set github
+
+github:
+  describes: GitHub fine-grained token for the repos I work on (contents read/write, PRs)
+  pass_path: agent/github
+  env: GITHUB_TOKEN
+  risk: medium
+  note: Expires every 90 days. Use with `gh` via GH_TOKEN=$GITHUB_TOKEN, or curl's Authorization header.
+
+openweather:
+  describes: OpenWeatherMap API key (free tier, 60 calls/min)
+  pass_path: agent/openweather
+  env: OWM_API_KEY
+  risk: low
+
+deploy_key:
+  describes: SSH private key for the staging deploy user
+  pass_path: agent/deploy-key
+  env: DEPLOY_KEY
+  risk: high
+  format: full
+  note: Write it to a 0600 temp file inside the command and delete it after; never echo it.
+
+# Documentation only (no value in pass): tools that already keep their own secret, so the agent
+# should just run them. Listed so the agent does not go looking for a credential.
+_tool_native:
+  ssh:
+    describes: Key-based SSH to my servers (ssh-agent holds the key)
+    use: just run ssh
+  gh:
+    describes: GitHub CLI, logged in through the system keyring
+    use: gh <command>
+
+# Documentation only: things that look like credentials but are public. The agent may print these.
+_public:
+  ssh_pubkey:
+    describes: Public half of my SSH key
+    path: ~/.ssh/id_ed25519.pub

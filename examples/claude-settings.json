@@ -1,0 +1,31 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bun /path/to/cred-broker/src/session-start.ts" }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Read|Grep|Glob",
+        "hooks": [
+          { "type": "command", "command": "bun /path/to/cred-broker/src/guard.ts" }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "deny": [
+      "Read(~/.password-store/**)",
+      "Read(~/.gnupg/private-keys-v1.d/**)",
+      "Edit(~/.gnupg/**)",
+      "Edit(~/.config/cred-broker/**)",
+      "Edit(~/.claude/settings.json)",
+      "Bash(pass show:*)",
+      "Bash(gpg -d:*)",
+      "Bash(gpg --decrypt:*)"
+    ]
+  }
+}

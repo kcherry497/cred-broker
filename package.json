@@ -1,0 +1,21 @@
+{
+  "name": "cred-broker",
+  "version": "0.1.0",
+  "description": "A local credential broker for AI coding agents: use secrets without them ever entering the transcript.",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/kcherry497/cred-broker.git" },
+  "homepage": "https://github.com/kcherry497/cred-broker#readme",
+  "bugs": { "url": "https://github.com/kcherry497/cred-broker/issues" },
+  "type": "module",
+  "private": true,
+  "bin": { "cred": "src/cred.ts" },
+  "engines": { "bun": ">=1.1.0" },
+  "os": ["linux"],
+  "scripts": {
+    "test": "bun test",
+    "doctor": "bun src/cred.ts doctor"
+  },
+  "dependencies": {
+    "yaml": "2.9.1"
+  }
+}
