@@ -1,7 +1,7 @@
 {
   "name": "cred-broker",
   "version": "0.1.0",
-  "description": "A local credential broker for AI coding agents: use secrets without them ever entering the transcript.",
+  "description": "Let your AI coding agent use approved credentials without ever seeing them.",
   "license": "MIT",
   "repository": { "type": "git", "url": "git+https://github.com/kcherry497/cred-broker.git" },
   "homepage": "https://github.com/kcherry497/cred-broker#readme",

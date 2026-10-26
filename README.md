@@ -1,6 +1,6 @@
 # cred-broker
 
-**Let your AI coding agent use your credentials without ever seeing them.**
+**Let your AI coding agent use approved credentials without ever seeing them.**
 
 Whatever an agent sees is captured. It enters the context window, is sent to the model provider,
 is written to the session transcript, and is often copied on into memory or search tools. A
@@ -71,6 +71,20 @@ catches the common encodings, and the guard catches the common ways round the br
 The guarantee is narrower than "secrets are safe", and more useful: **nobody has to paste a
 credential into an agent, and no session has a reason to print one.**
 
+## Give the agent its own credentials
+
+Recommended: create credentials for your agent, API keys included, instead of handing it yours.
+Use a bot or service account, a fine-grained token, or a separate API key, and store that under
+the name the agent uses.
+
+- **Its changes are tracked as its own, not yours.** Commits, API calls and the service's audit
+  logs show the agent's identity, so you can tell what it did from what you did.
+- **You choose its reach.** Grant only the scopes its work needs, not everything your account can do.
+- **You can revoke it alone.** Cutting the agent off leaves your own login untouched.
+
+The broker's audit log records which session used which credential name. The service's logs record
+what that credential did. Together they answer "what did the agent change?"
+
 ## Requirements
 
 - Linux. This is what is tested; macOS is untested (gpg, `script` and `systemd-run` differ there,
@@ -108,7 +122,9 @@ cred doctor
    cp examples/manifest.example.yaml ~/.config/cred-broker/manifest.yaml   # then edit it
    ```
 
-3. **Store a value, in your own terminal.** It prompts; the value never passes through the agent:
+3. **Store a value, in your own terminal.** Ideally a token made for the agent (see
+   [Give the agent its own credentials](#give-the-agent-its-own-credentials)). It prompts; the value
+   never passes through the agent:
 
    ```bash
    cred set github
